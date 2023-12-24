@@ -1,0 +1,23 @@
+name: Generate API Code
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate_api_code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install OpenAPI Generator CLI
+      run: |
+        sudo npm install -g @openapitools/openapi-generator-cli
+
+    - name: Generate API Code
+      run: |
+        openapi-generator-cli generate -i openapi.yaml -g go -o generated-code
+
