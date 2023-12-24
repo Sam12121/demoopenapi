@@ -15,9 +15,19 @@ jobs:
 
     - name: Install OpenAPI Generator CLI
       run: |
-        sudo npm install -g @openapitools/openapi-generator-cli
+        mkdir -p $HOME/.openapi-generator
+        curl https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/3.0.3/openapi-generator-cli-3.0.3.jar -o $HOME/.openapi-generator/openapi-generator-cli.jar
+        echo 'alias openapi-generator-cli="java -jar $HOME/.openapi-generator/openapi-generator-cli.jar"' >> $HOME/.bashrc
+        source $HOME/.bashrc
 
     - name: Generate API Code
       run: |
         openapi-generator-cli generate -i openapi.yaml -g go -o generated-code
 
+    - name: Commit Generated Code
+      run: |
+        git config --local user.email "smcoolsam44@gmail.com"
+        git config --local user.name "Sam12121"
+        git add generated-code
+        git commit -m "Generate API code"
+        git push
