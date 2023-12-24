@@ -13,16 +13,10 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Install OpenAPI Generator CLI
-      run: |
-        mkdir -p $HOME/.openapi-generator
-        curl https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/3.0.3/openapi-generator-cli-3.0.3.jar -o $HOME/.openapi-generator/openapi-generator-cli.jar
-        echo 'alias openapi-generator-cli="java -jar $HOME/.openapi-generator/openapi-generator-cli.jar"' >> $HOME/.bashrc
-        source $HOME/.bashrc
-
     - name: Generate API Code
-      run: |
-        openapi-generator-cli generate -i openapi.yaml -g go -o generated-code
+      uses: docker://openapitools/openapi-generator-cli:v3.0.3
+      with:
+        args: generate -i openapi.yaml -g go -o generated-code
 
     - name: Commit Generated Code
       run: |
